@@ -140,4 +140,11 @@ def update_point(data: UpdatePointRequest):
 
             sheets.spreadsheets().values().update(
                 spreadsheetId=sheet_id,
-                range=f"{d
+                range=f"{data.route_sheet}!AP{row_index}",
+                valueInputOption="USER_ENTERED",
+                body={"values": [[data.problem or ""]]}
+            ).execute()
+
+            return {"status": "ok"}
+
+    raise HTTPException(status_code=404, detail="Точка не найдена")
