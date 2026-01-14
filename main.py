@@ -177,3 +177,6 @@ def update_point(data: UpdatePointRequest):
     except Exception as e:
         logging.exception("Ошибка в update_point:")
         return JSONResponse(status_code=500, content={"error": str(e)})
+@app.get("/")
+def root():
+    return {"status": "ok", "message": "API is running"}
