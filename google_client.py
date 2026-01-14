@@ -1,18 +1,19 @@
-import json
 import os
-from google.oauth2.service_account import Credentials
+import json
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 def get_sheets_service():
-    service_account_info = json.loads(
-        os.environ["GOOGLE_SERVICE_ACCOUNT_JSON"]
-    )
+    creds_json = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")
+    if not creds_json:
+        raise RuntimeError("GOOGLE_SERVICE_ACCOUNT_JSON not set")
 
-    credentials = Credentials.from_service_account_info(
-        service_account_info,
-        scopes=SCOPES
+    creds_dict = json.loads(creds_json)
+
+    credentials = service_account.Credentials.from_service_account_info(
+        creds_dict,
+        scopes=["https://www.googleapis.com/auth/spreadsheets"]
     )
 
     return build("sheets", "v4", credentials=credentials)
